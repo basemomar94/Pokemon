@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "781196180195",
+    "project_id": "pokemon-53d7e",
+    "storage_bucket": "pokemon-53d7e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:781196180195:android:401cb0b2be258e787e23d6",
+        "android_client_info": {
+          "package_name": "com.dadon.pokemon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "781196180195-d2s5vpq2sg30jbngf7phb1m0ug3vu5fb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuYJaFE76ozaKlXG_BWXswSI_hhlwsI7Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "781196180195-d2s5vpq2sg30jbngf7phb1m0ug3vu5fb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
