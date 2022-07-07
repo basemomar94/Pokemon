@@ -7,19 +7,23 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dadon.pokemon.R
 import com.dadon.pokemon.databinding.HomeFragmentBinding
 import com.dadon.pokemon.models.Pokemon
 import com.dadon.pokemon.ui.adapters.HomeAdapter
 import com.dadon.pokemon.viewmodels.PokemonViewModel
+import kotlinx.coroutines.*
 
-class HomeFragment : Fragment(R.layout.home_fragment) {
+class HomeFragment : Fragment(R.layout.home_fragment), HomeAdapter.InteractInterface {
 
     private var binding: HomeFragmentBinding? = null
     private var viewModel: PokemonViewModel? = null
     private var homeAdapter: HomeAdapter? = null
     private var pokemonList: MutableList<Pokemon> = mutableListOf()
+    private val job = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main + job)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +66,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
 
 
     private fun settingRv(_list: MutableList<Pokemon>) {
-        homeAdapter = HomeAdapter(_list)
+        homeAdapter = HomeAdapter(_list, this)
         binding?.pokemonRv?.apply {
             adapter = homeAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
@@ -98,6 +102,25 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         }
 
         homeAdapter?.search(searchList)
+
+    }
+
+    override fun makeFav(pokemon: Pokemon, position: Int) {
+        uiScope.launch {
+            makeFavorite(pokemon, position)
+        }
+
+
+    }
+
+
+    suspend fun makeFavorite(pokemon: Pokemon, position: Int) {
+        val imageUrl =
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/crystal/${position + 1}.png"
+        pokemon.image = imageUrl
+        withContext(Dispatchers.IO) {
+            viewModel?.addtoFavorite(pokemon)
+        }
 
     }
 
