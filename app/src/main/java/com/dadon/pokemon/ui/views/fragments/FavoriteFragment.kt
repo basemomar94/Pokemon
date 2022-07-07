@@ -6,13 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.dadon.pokemon.R
 import com.dadon.pokemon.databinding.FavoriteFragmentBinding
 import com.dadon.pokemon.models.Pokemon
 import com.dadon.pokemon.ui.adapters.FavoriteAdapter
-import com.dadon.pokemon.ui.adapters.HomeAdapter
 import com.dadon.pokemon.viewmodels.PokemonViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 
 class FavoriteFragment : Fragment(R.layout.favorite_fragment) {
@@ -22,6 +25,7 @@ class FavoriteFragment : Fragment(R.layout.favorite_fragment) {
     private var favoriteAdapter: FavoriteAdapter? = null
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
+    private var favList: MutableList<Pokemon> = mutableListOf()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,9 +63,14 @@ class FavoriteFragment : Fragment(R.layout.favorite_fragment) {
         }
     }
 
-    private fun observeFav(){
-        viewModel?.favPokemon?.observe(viewLifecycleOwner){
-            settingRv(it)
+    private fun observeFav() {
+        viewModel?.favPokemon?.observe(viewLifecycleOwner) {
+            if (it != null) {
+                favList = it
+                settingRv(favList)
+                swipeDelete()
+            }
+
 
         }
     }
@@ -70,9 +79,73 @@ class FavoriteFragment : Fragment(R.layout.favorite_fragment) {
         favoriteAdapter = FavoriteAdapter(_list)
         binding?.favoriteRv?.apply {
             adapter = favoriteAdapter
-            layoutManager = GridLayoutManager(requireContext(), 2)
+            layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
         }
+
+    }
+
+    private fun swipeDelete() {
+        val itemTouchHelperCallback =
+            object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    return false
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val position = viewHolder.adapterPosition
+                    val pokemon = favList?.get(position)
+                    if (pokemon != null) {
+                        deletePokemon(pokemon, position)
+                    }
+
+
+                }
+
+            }
+        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+        itemTouchHelper.attachToRecyclerView(binding?.favoriteRv)
+
+    }
+
+    private fun deletePokemon(pokemon: Pokemon, position: Int) {
+        favList.remove(pokemon)
+        favoriteAdapter?.notifyItemRemoved(position)
+        uiScope.launch {
+            viewModel?.removeFav(pokemon)
+        }
+
+        /* Snackbar.make(requireView(), "You have remove a Pokemon", Snackbar.LENGTH_LONG)
+             .setAction("undo") {
+                 undoDelete(pokemon, position)
+             }.show()*/
+        showSnackBar(pokemon, position)
+
+    }
+
+    private fun undoDelete(pokemon: Pokemon, position: Int) {
+        uiScope.launch {
+            viewModel?.addtoFavorite(pokemon)
+        }
+        favList.add(position, pokemon)
+        favoriteAdapter?.notifyItemInserted(position)
+
+    }
+
+    private fun showSnackBar(pokemon: Pokemon, position: Int) {
+        val bottomNavigationView =
+            requireActivity().findViewById<BottomNavigationView>(R.id.bottomAppBar)
+        val snackbar =
+            Snackbar.make(requireView(), "Snackbar over BottomNav", Snackbar.LENGTH_INDEFINITE)
+        snackbar.anchorView = bottomNavigationView
+        snackbar.setAction("undo") {
+            undoDelete(pokemon, position)
+        }
+        snackbar.show()
 
     }
 }

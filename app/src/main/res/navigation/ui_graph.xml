@@ -12,4 +12,8 @@
         android:id="@+id/favoriteFragment"
         android:name="com.dadon.pokemon.ui.views.fragments.FavoriteFragment"
         android:label="FavoriteFragment" />
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="com.dadon.pokemon.ui.views.fragments.AccountFragment"
+        android:label="AccountFragment" />
 </navigation>

@@ -18,4 +18,8 @@ class LoginViewModel : ViewModel() {
     fun signIn(email: String, password: String) {
         repo.signIn(email, password, isSuccess)
     }
+
+    fun logout() {
+        repo.logOut()
+    }
 }

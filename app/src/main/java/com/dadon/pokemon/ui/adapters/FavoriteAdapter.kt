@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dadon.pokemon.R
+import com.dadon.pokemon.databinding.FavItemBinding
 import com.dadon.pokemon.databinding.PokemonItemBinding
 import com.dadon.pokemon.models.Pokemon
 import com.squareup.picasso.Callback
@@ -13,10 +14,10 @@ import com.squareup.picasso.Picasso
 class FavoriteAdapter(
     private var pokemonsList: MutableList<Pokemon>,
 
-) : RecyclerView.Adapter<FavoriteAdapter.ViewHolder>() {
+    ) : RecyclerView.Adapter<FavoriteAdapter.ViewHolder>() {
 
 
-    inner class ViewHolder(val binding: PokemonItemBinding) :
+    inner class ViewHolder(val binding: FavItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
@@ -27,7 +28,7 @@ class FavoriteAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = PokemonItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = FavItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -42,7 +43,7 @@ class FavoriteAdapter(
                 Picasso.get().setIndicatorsEnabled(false)
 
                 Picasso.get().load(imageUrl).fit().networkPolicy(NetworkPolicy.OFFLINE)
-                    .into(binding.pokeImg,
+                    .into(binding.pokeImgfav,
                         object : Callback {
                             override fun onSuccess() {
 
@@ -50,11 +51,11 @@ class FavoriteAdapter(
 
                             override fun onError(e: Exception?) {
                                 Picasso.get().load(R.drawable.ic_pok__ball_icon).fit()
-                                    .into(binding.pokeImg)
+                                    .into(binding.pokeImgfav)
                             }
 
                         })
-                binding.pokeName.text = this.name
+                binding.pokeNamefav.text = this.name
             }
         }
     }

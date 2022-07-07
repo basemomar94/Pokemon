@@ -20,7 +20,7 @@ class PokemonViewModel(app: Application) : AndroidViewModel(app) {
     val favPokemon = MutableLiveData<MutableList<Pokemon>>()
 
 
-    fun getAllPokemon() = viewModelScope.launch {
+    suspend fun getAllPokemon() = viewModelScope.launch {
         allPokemon.postValue(repo.getAllPokemon().body()?.results)
     }
 
@@ -30,6 +30,10 @@ class PokemonViewModel(app: Application) : AndroidViewModel(app) {
 
     suspend fun getFav() {
         repo.getFavorite(favPokemon)
+    }
+
+    suspend fun removeFav(pokemon: Pokemon) {
+        repo.removeFavorite(pokemon)
     }
 
 }

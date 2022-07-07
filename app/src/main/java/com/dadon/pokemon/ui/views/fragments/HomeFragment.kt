@@ -1,10 +1,17 @@
 package com.dadon.pokemon.ui.views.fragments
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -38,13 +45,20 @@ class HomeFragment : Fragment(R.layout.home_fragment), HomeAdapter.InteractInter
         return binding?.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initViewModel()
-        gettingPokemons()
-        observePokemons()
-        searchInput()
+        if (isOnline(requireContext())) {
+            gettingPokemons()
+            observePokemons()
+            searchInput()
+        } else {
+            Toast.makeText(requireContext(), "please check your connection", Toast.LENGTH_LONG)
+                .show()
+        }
+
     }
 
 
@@ -54,13 +68,23 @@ class HomeFragment : Fragment(R.layout.home_fragment), HomeAdapter.InteractInter
     }
 
     private fun gettingPokemons() {
-        viewModel?.getAllPokemon()
+        try {
+            uiScope.launch {
+                viewModel?.getAllPokemon()
+            }
+
+        } catch (e: Exception) {
+            println(e.message)
+        }
     }
 
     private fun observePokemons() {
         viewModel?.allPokemon?.observe(viewLifecycleOwner) {
-            pokemonList = it
-            settingRv(pokemonList)
+            if (!it.isNullOrEmpty()) {
+                pokemonList = it
+                settingRv(pokemonList)
+            }
+
         }
     }
 
@@ -118,10 +142,32 @@ class HomeFragment : Fragment(R.layout.home_fragment), HomeAdapter.InteractInter
         val imageUrl =
             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/crystal/${position + 1}.png"
         pokemon.image = imageUrl
-        withContext(Dispatchers.IO) {
+        uiScope.launch {
             viewModel?.addtoFavorite(pokemon)
         }
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun isOnline(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager != null) {
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                    return true
+                }
+            }
+        }
+        return false
+    }
 }

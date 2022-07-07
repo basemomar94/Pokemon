@@ -10,7 +10,6 @@ class LoginRepo {
     val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
 
-
     fun signup(email: String, password: String, isSuccess: MutableLiveData<Boolean>) {
 
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
@@ -20,7 +19,7 @@ class LoginRepo {
 
         }.addOnFailureListener {
             isSuccess.postValue(false)
-           println(it.message)
+            println(it.message)
         }
 
     }
@@ -37,6 +36,10 @@ class LoginRepo {
             println(it.message)
         }
 
+    }
+
+    fun logOut() {
+        auth.signOut()
     }
 
 }
