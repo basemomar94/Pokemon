@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -15,8 +16,10 @@ import com.dadon.pokemon.viewmodels.PokemonViewModel
 
 class HomeFragment : Fragment(R.layout.home_fragment) {
 
-    var binding: HomeFragmentBinding? = null
-    var viewModel: PokemonViewModel? = null
+    private var binding: HomeFragmentBinding? = null
+    private var viewModel: PokemonViewModel? = null
+    private var homeAdapter: HomeAdapter? = null
+    private var pokemonList: MutableList<Pokemon> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +40,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         initViewModel()
         gettingPokemons()
         observePokemons()
+        searchInput()
     }
 
 
@@ -51,18 +55,49 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
 
     private fun observePokemons() {
         viewModel?.allPokemon?.observe(viewLifecycleOwner) {
-            println(it.size)
-            settingRv(it)
+            pokemonList = it
+            settingRv(pokemonList)
         }
     }
 
 
     private fun settingRv(_list: MutableList<Pokemon>) {
+        homeAdapter = HomeAdapter(_list)
         binding?.pokemonRv?.apply {
-            adapter = HomeAdapter(_list)
+            adapter = homeAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
             setHasFixedSize(true)
         }
+
+    }
+
+
+    private fun searchInput() {
+        binding?.searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+
+                return false
+
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+
+                query?.let { searchProcess(it) }
+                return true
+            }
+        })
+    }
+
+
+    private fun searchProcess(search: String) {
+        val searchList: MutableList<Pokemon> = mutableListOf()
+        pokemonList.forEach {
+            if (it.name.contains(search)) {
+                searchList.add(it)
+            }
+        }
+
+        homeAdapter?.search(searchList)
 
     }
 

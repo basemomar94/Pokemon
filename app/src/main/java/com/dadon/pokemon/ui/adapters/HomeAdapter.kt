@@ -8,7 +8,7 @@ import com.dadon.pokemon.models.Pokemon
 import com.squareup.picasso.Picasso
 
 class HomeAdapter(
-    private val pokemonsList: MutableList<Pokemon>
+    private var pokemonsList: MutableList<Pokemon>
 ) : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
 
 
@@ -36,4 +36,9 @@ class HomeAdapter(
     }
 
     override fun getItemCount() = pokemonsList.size
+
+    fun search(searchList: MutableList<Pokemon>) {
+        pokemonsList = searchList
+        notifyDataSetChanged()
+    }
 }
