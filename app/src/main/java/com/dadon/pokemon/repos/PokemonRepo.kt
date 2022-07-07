@@ -1,6 +1,7 @@
 package com.dadon.pokemon.repos
 
 import android.content.Context
+import androidx.lifecycle.MutableLiveData
 import com.dadon.pokemon.data.local.PokemonDatabase
 import com.dadon.pokemon.data.remote.ServiceApi
 import com.dadon.pokemon.models.Pokemon
@@ -18,6 +19,10 @@ class PokemonRepo(private val serviceApi: ServiceApi, private val context: Conte
 
     suspend fun addFavorite(pokemon: Pokemon) {
         db.pokemonDao().addFavorite(pokemon)
+    }
+
+    suspend fun getFavorite(_list: MutableLiveData<MutableList<Pokemon>>) {
+        _list.postValue(db.pokemonDao().getFavorites())
     }
 
 

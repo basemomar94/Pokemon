@@ -17,14 +17,19 @@ class PokemonViewModel(app: Application) : AndroidViewModel(app) {
     private val api = RetrofitBuilder.getRetrofitBuilder().create(ServiceApi::class.java)
     private val repo = PokemonRepo(api, context)
     val allPokemon = MutableLiveData<MutableList<Pokemon>>()
+    val favPokemon = MutableLiveData<MutableList<Pokemon>>()
 
 
     fun getAllPokemon() = viewModelScope.launch {
         allPokemon.postValue(repo.getAllPokemon().body()?.results)
     }
 
- suspend   fun addtoFavorite(pokemon: Pokemon) = viewModelScope.launch {
+    suspend fun addtoFavorite(pokemon: Pokemon) = viewModelScope.launch {
         repo.addFavorite(pokemon)
+    }
+
+    suspend fun getFav() {
+        repo.getFavorite(favPokemon)
     }
 
 }

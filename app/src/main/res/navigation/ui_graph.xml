@@ -8,4 +8,8 @@
         android:id="@+id/homeFragment"
         android:name="com.dadon.pokemon.ui.views.fragments.HomeFragment"
         android:label="HomeFragment" />
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="com.dadon.pokemon.ui.views.fragments.FavoriteFragment"
+        android:label="FavoriteFragment" />
 </navigation>
