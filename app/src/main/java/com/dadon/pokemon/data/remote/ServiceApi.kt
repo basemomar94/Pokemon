@@ -15,5 +15,9 @@ interface ServiceApi {
         @Query("limit") limit: String,
     ): Response<PokemonResult>
 
+    @GET("pokemon-species/{id}")
+    suspend fun getPokemonInfo(
+        @Path("id") id: String
+    )
 
 }

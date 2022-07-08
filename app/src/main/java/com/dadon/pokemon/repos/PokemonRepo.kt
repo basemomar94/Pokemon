@@ -25,8 +25,12 @@ class PokemonRepo(private val serviceApi: ServiceApi, private val context: Conte
         _list.postValue(db.pokemonDao().getFavorites())
     }
 
-    suspend fun removeFavorite(pokemon: Pokemon){
+    suspend fun removeFavorite(pokemon: Pokemon) {
         db.pokemonDao().removeFavorite(pokemon)
+    }
+
+    suspend fun getPokemonInfo(id: String) {
+        serviceApi.getPokemonInfo(id)
     }
 
 

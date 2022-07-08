@@ -36,4 +36,8 @@ class PokemonViewModel(app: Application) : AndroidViewModel(app) {
         repo.removeFavorite(pokemon)
     }
 
+    suspend fun getPokemonInfo(id: String) {
+        repo.getPokemonInfo(id)
+    }
+
 }

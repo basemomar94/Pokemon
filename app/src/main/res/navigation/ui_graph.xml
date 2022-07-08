@@ -7,7 +7,11 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.dadon.pokemon.ui.views.fragments.HomeFragment"
-        android:label="HomeFragment" />
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_inoViewPager"
+            app:destination="@id/inoViewPager" />
+    </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
         android:name="com.dadon.pokemon.ui.views.fragments.FavoriteFragment"
@@ -16,4 +20,8 @@
         android:id="@+id/accountFragment"
         android:name="com.dadon.pokemon.ui.views.fragments.AccountFragment"
         android:label="AccountFragment" />
+    <fragment
+        android:id="@+id/inoViewPager"
+        android:name="com.dadon.pokemon.ui.views.fragments.InoViewPager"
+        android:label="InoViewPager" />
 </navigation>

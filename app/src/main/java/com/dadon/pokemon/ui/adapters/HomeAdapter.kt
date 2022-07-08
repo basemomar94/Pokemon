@@ -24,6 +24,10 @@ class HomeAdapter(
                 val pokemon = pokemonsList[adapterPosition]
                 onclick.makeFav(pokemon,adapterPosition)
             }
+
+            itemView?.setOnClickListener {
+                onclick.viewInfo(adapterPosition)
+            }
         }
 
 
@@ -71,5 +75,6 @@ class HomeAdapter(
 
     interface InteractInterface {
         fun makeFav(pokemon: Pokemon,position: Int)
+        fun viewInfo(position: Int)
     }
 }

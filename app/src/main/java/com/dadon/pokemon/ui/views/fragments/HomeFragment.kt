@@ -15,6 +15,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dadon.pokemon.R
 import com.dadon.pokemon.databinding.HomeFragmentBinding
@@ -137,6 +138,10 @@ class HomeFragment : Fragment(R.layout.home_fragment), HomeAdapter.InteractInter
 
     }
 
+    override fun viewInfo(position: Int) {
+        gotoInfo(position)
+    }
+
 
     suspend fun makeFavorite(pokemon: Pokemon, position: Int) {
         val imageUrl =
@@ -169,5 +174,11 @@ class HomeFragment : Fragment(R.layout.home_fragment), HomeAdapter.InteractInter
             }
         }
         return false
+    }
+
+    private fun gotoInfo(position: Int) {
+        val bundle = Bundle()
+        bundle.putString("id", position.toString())
+        NavHostFragment.findNavController(this).navigate(R.id.action_homeFragment_to_inoViewPager)
     }
 }
