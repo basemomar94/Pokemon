@@ -22,11 +22,13 @@ class HomeAdapter(
         init {
             binding.imageView.setOnClickListener {
                 val pokemon = pokemonsList[adapterPosition]
-                onclick.makeFav(pokemon,adapterPosition)
+                onclick.makeFav(pokemon, adapterPosition)
             }
 
             itemView?.setOnClickListener {
-                onclick.viewInfo(adapterPosition)
+                val pokemon = pokemonsList[adapterPosition]
+
+                onclick.viewInfo(pokemon, adapterPosition)
             }
         }
 
@@ -74,7 +76,7 @@ class HomeAdapter(
     }
 
     interface InteractInterface {
-        fun makeFav(pokemon: Pokemon,position: Int)
-        fun viewInfo(position: Int)
+        fun makeFav(pokemon: Pokemon, position: Int)
+        fun viewInfo(pokemon: Pokemon, position: Int)
     }
 }

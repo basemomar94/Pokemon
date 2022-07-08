@@ -1,5 +1,6 @@
 package com.dadon.pokemon.data.remote
 
+import com.dadon.pokemon.models.Description
 import com.dadon.pokemon.models.PokemonResult
 import retrofit2.Response
 import retrofit2.http.GET
@@ -18,6 +19,6 @@ interface ServiceApi {
     @GET("pokemon-species/{id}")
     suspend fun getPokemonInfo(
         @Path("id") id: String
-    )
+    ): Response<Description>
 
 }

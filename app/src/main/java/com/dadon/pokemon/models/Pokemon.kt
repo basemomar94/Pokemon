@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey
 import androidx.room.RoomMasterTable.TABLE_NAME
 import com.dadon.pokemon.utilits.CONSTANTS
 import com.dadon.pokemon.utilits.CONSTANTS.POKEMON_TABLE
+import java.io.Serializable
 
 
 @Entity(tableName = POKEMON_TABLE)
@@ -14,4 +15,4 @@ data class Pokemon(
     val name: String,
     val url: String,
     var image: String = ""
-)
+) : Serializable

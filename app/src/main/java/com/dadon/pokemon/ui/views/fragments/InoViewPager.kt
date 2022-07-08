@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.dadon.pokemon.R
 import com.dadon.pokemon.databinding.InfoviewpagerFragmentBinding
+import com.dadon.pokemon.models.Pokemon
 import com.dadon.pokemon.ui.adapters.InfoPageViewerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -15,12 +16,13 @@ import com.smarteist.autoimageslider.SliderView
 
 class InoViewPager : Fragment(R.layout.infoviewpager_fragment) {
     var binding: InfoviewpagerFragmentBinding? = null
-    lateinit var pager: ViewPager2
-    lateinit var pagerAdapter: InfoPageViewerAdapter
-    lateinit var tab: TabLayout
+    var tabtitle = arrayOf("About", "Abilities")
+    private lateinit var pager2: ViewPager2
+    private lateinit var tabl: TabLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        println("here we are")
     }
 
     override fun onCreateView(
@@ -34,24 +36,29 @@ class InoViewPager : Fragment(R.layout.infoviewpager_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        pagerSetup()
-    }
 
-    fun pagerSetup() {
-        tab = binding?.tabs!!
-        pager = binding?.homePager!!
-        pagerAdapter =
-            InfoPageViewerAdapter(
-                requireActivity().supportFragmentManager,
-                requireActivity().lifecycle
-            )
-        pager.adapter = pagerAdapter
-        TabLayoutMediator(tab, pager) {
+        pager2 = view.findViewById(R.id.homePager)
+        tabl = view.findViewById(R.id.tabs)
+        pager2.adapter = InfoPageViewerAdapter(
+            requireActivity().supportFragmentManager,
+            requireActivity().lifecycle
+        )
+        TabLayoutMediator(tabl, pager2) {
 
                 tab, position ->
-            val tabtitles = mutableListOf<String>("about", "abilities")
-            tab.text = tabtitles[position]
+            tab.text = tabtitle[position]
 
         }.attach()
+        updateUi()
+
+
+    }
+
+
+    private fun updateUi() {
+        val bundle = this.arguments
+//        val pokemon = bundle?.getSerializable("pokemon") as Pokemon
+      //  println(pokemon.name)
+
     }
 }

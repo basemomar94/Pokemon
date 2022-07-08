@@ -15,12 +15,14 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dadon.pokemon.R
 import com.dadon.pokemon.databinding.HomeFragmentBinding
 import com.dadon.pokemon.models.Pokemon
 import com.dadon.pokemon.ui.adapters.HomeAdapter
+import com.dadon.pokemon.utilits.CONSTANTS.ID
 import com.dadon.pokemon.viewmodels.PokemonViewModel
 import kotlinx.coroutines.*
 
@@ -51,6 +53,7 @@ class HomeFragment : Fragment(R.layout.home_fragment), HomeAdapter.InteractInter
         super.onViewCreated(view, savedInstanceState)
 
         initViewModel()
+        test()
         if (isOnline(requireContext())) {
             gettingPokemons()
             observePokemons()
@@ -138,8 +141,8 @@ class HomeFragment : Fragment(R.layout.home_fragment), HomeAdapter.InteractInter
 
     }
 
-    override fun viewInfo(position: Int) {
-        gotoInfo(position)
+    override fun viewInfo(pokemon: Pokemon, position: Int) {
+        gotoInfo(position, pokemon)
     }
 
 
@@ -176,9 +179,20 @@ class HomeFragment : Fragment(R.layout.home_fragment), HomeAdapter.InteractInter
         return false
     }
 
-    private fun gotoInfo(position: Int) {
-        val bundle = Bundle()
+    private fun gotoInfo(position: Int, pokemon: Pokemon) {
+        val navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+        var bundle = Bundle()
         bundle.putString("id", position.toString())
-        NavHostFragment.findNavController(this).navigate(R.id.action_homeFragment_to_inoViewPager)
+         bundle.putSerializable("pokemon", pokemon)
+        navController.navigate(R.id.action_homeFragment_to_inoViewPager, bundle)
+        ID = position.toString()
+    }
+
+    private fun test() {
+        uiScope.launch {
+            viewModel?.getPokemonInfo("5")
+
+        }
     }
 }
+

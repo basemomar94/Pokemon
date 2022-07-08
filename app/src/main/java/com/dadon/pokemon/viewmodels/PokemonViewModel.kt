@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dadon.pokemon.data.remote.RetrofitBuilder
 import com.dadon.pokemon.data.remote.ServiceApi
+import com.dadon.pokemon.models.Description
 import com.dadon.pokemon.models.Pokemon
 import com.dadon.pokemon.repos.PokemonRepo
 import kotlinx.coroutines.launch
@@ -18,6 +19,7 @@ class PokemonViewModel(app: Application) : AndroidViewModel(app) {
     private val repo = PokemonRepo(api, context)
     val allPokemon = MutableLiveData<MutableList<Pokemon>>()
     val favPokemon = MutableLiveData<MutableList<Pokemon>>()
+    val pokemonDesc = MutableLiveData<Description>()
 
 
     suspend fun getAllPokemon() = viewModelScope.launch {
@@ -37,7 +39,10 @@ class PokemonViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     suspend fun getPokemonInfo(id: String) {
-        repo.getPokemonInfo(id)
+        pokemonDesc.postValue(repo.getPokemonInfo(id).body())
+
+
+
     }
 
 }
