@@ -183,7 +183,11 @@ class HomeFragment : Fragment(R.layout.home_fragment), HomeAdapter.InteractInter
         val navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
         var bundle = Bundle()
         bundle.putString("id", position.toString())
-         bundle.putSerializable("pokemon", pokemon)
+        bundle.putString("name", pokemon.name)
+        val imageUrl =
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/crystal/${position + 1}.png"
+        bundle.putString("url", imageUrl)
+        //  bundle.putSerializable("pokemon", pokemon)
         navController.navigate(R.id.action_homeFragment_to_inoViewPager, bundle)
         ID = position.toString()
     }

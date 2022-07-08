@@ -13,6 +13,7 @@ import com.dadon.pokemon.ui.adapters.InfoPageViewerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.smarteist.autoimageslider.SliderView
+import com.squareup.picasso.Picasso
 
 class InoViewPager : Fragment(R.layout.infoviewpager_fragment) {
     var binding: InfoviewpagerFragmentBinding? = null
@@ -58,7 +59,13 @@ class InoViewPager : Fragment(R.layout.infoviewpager_fragment) {
     private fun updateUi() {
         val bundle = this.arguments
 //        val pokemon = bundle?.getSerializable("pokemon") as Pokemon
-      //  println(pokemon.name)
+        //  println(pokemon.name)
+        val url = bundle?.getString("url")
+        val name = bundle?.getString("name")
+
+        binding?.infoName?.text = name
+        Picasso.get().load(url).into(binding?.infoImg)
+
 
     }
 }

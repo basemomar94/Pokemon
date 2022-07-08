@@ -8,12 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.dadon.pokemon.R
 import com.dadon.pokemon.databinding.AboutFragmentBinding
+import com.dadon.pokemon.models.Description
 import com.dadon.pokemon.utilits.CONSTANTS.ID
 import com.dadon.pokemon.viewmodels.PokemonViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.util.*
 
 class AboutFragment : Fragment(R.layout.about_fragment) {
 
@@ -51,10 +53,12 @@ class AboutFragment : Fragment(R.layout.about_fragment) {
 
     private fun getAboutPokemon() {
         var bundle = this.arguments
-        println(bundle?.getString("id"))
+        println(bundle?.getString("5"))
+
+        val id = (1..100).random()
 
         uiScope.launch {
-            viewModel?.getPokemonInfo("5")
+            viewModel?.getPokemonInfo(id.toString())
         }
 
 
@@ -62,11 +66,16 @@ class AboutFragment : Fragment(R.layout.about_fragment) {
 
     private fun observeDetails() {
         viewModel?.pokemonDesc?.observe(viewLifecycleOwner) {
-            println(it)
+            println(it.form_descriptions)
+            updateUi(it)
         }
     }
 
-    private fun updateUi() {
+    private fun updateUi(description: Description) {
+
+        binding?.textView4?.text = description.flavor_text_entries[0].flavor_text
+        binding?.genera?.text = description.genera.get(0).genus
+        binding?.generation?.text = description.generation.name
 
     }
 }
