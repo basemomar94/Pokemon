@@ -12,7 +12,6 @@ data class Description(
     val forms_switchable: Boolean,
     val gender_rate: Int,
     val genera: List<Genera>,
-    val generation: Generation,
     val growth_rate: GrowthRate,
     val habitat: Habitat,
     val has_gender_differences: Boolean,

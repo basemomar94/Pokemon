@@ -52,9 +52,6 @@ class AboutFragment : Fragment(R.layout.about_fragment) {
     }
 
     private fun getAboutPokemon() {
-        var bundle = this.arguments
-        println(bundle?.getString("5"))
-
         val id = (1..100).random()
 
         uiScope.launch {
@@ -75,7 +72,7 @@ class AboutFragment : Fragment(R.layout.about_fragment) {
 
         binding?.textView4?.text = description.flavor_text_entries[0].flavor_text
         binding?.genera?.text = description.genera.get(0).genus
-        binding?.generation?.text = description.generation.name
+       // binding?.generation?.text = description.generation.name
 
     }
 }

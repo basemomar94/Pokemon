@@ -1,6 +1,6 @@
 package com.dadon.pokemon.models
 
-data class Generation(
+data class StatX(
     val name: String,
     val url: String
 )

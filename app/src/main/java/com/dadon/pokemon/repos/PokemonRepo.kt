@@ -21,6 +21,10 @@ class PokemonRepo(private val serviceApi: ServiceApi, private val context: Conte
         serviceApi.getPokemonInfo(id)
     }
 
+    suspend fun getPokemonAbilities(id: String) = withContext(Dispatchers.IO) {
+        serviceApi.getStats(id)
+    }
+
 
     suspend fun addFavorite(pokemon: Pokemon) {
         db.pokemonDao().addFavorite(pokemon)

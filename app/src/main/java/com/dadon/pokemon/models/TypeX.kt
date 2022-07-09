@@ -1,6 +1,6 @@
 package com.dadon.pokemon.models
 
-data class Version(
+data class TypeX(
     val name: String,
     val url: String
 )

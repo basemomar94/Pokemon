@@ -1,5 +1,6 @@
 package com.dadon.pokemon.data.remote
 
+import com.dadon.pokemon.models.Abilities
 import com.dadon.pokemon.models.Description
 import com.dadon.pokemon.models.PokemonResult
 import retrofit2.Response
@@ -20,5 +21,11 @@ interface ServiceApi {
     suspend fun getPokemonInfo(
         @Path("id") id: String
     ): Response<Description>
+
+
+    @GET("pokemon/{id}")
+    suspend fun getStats(
+        @Path("id") id: String
+    ): Response<Abilities>
 
 }
