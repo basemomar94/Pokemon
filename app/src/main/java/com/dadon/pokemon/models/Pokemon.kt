@@ -14,5 +14,6 @@ data class Pokemon(
     val id: Int? = null,
     val name: String,
     val url: String,
-    var image: String = ""
+    var image: String = "",
+    var isFavorite: Boolean = false
 ) : Serializable

@@ -140,7 +140,7 @@ class FavoriteFragment : Fragment(R.layout.favorite_fragment) {
         val bottomNavigationView =
             requireActivity().findViewById<BottomNavigationView>(R.id.bottomAppBar)
         val snackbar =
-            Snackbar.make(requireView(), "Snackbar over BottomNav", Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(requireView(), "You've removed from favorite", Snackbar.LENGTH_LONG)
         snackbar.anchorView = bottomNavigationView
         snackbar.setAction("undo") {
             undoDelete(pokemon, position)

@@ -8,7 +8,7 @@ import com.dadon.pokemon.models.Pokemon
 import com.dadon.pokemon.utilits.CONSTANTS.POKEMON_DATABASE
 
 
-@Database(entities = [Pokemon::class], version = 1, exportSchema = false)
+@Database(entities = [Pokemon::class], version = 2, exportSchema = false)
 abstract class PokemonDatabase : RoomDatabase() {
 
 
@@ -34,7 +34,7 @@ abstract class PokemonDatabase : RoomDatabase() {
             return Room.databaseBuilder(
                 context.applicationContext, PokemonDatabase::class.java,
                 POKEMON_DATABASE
-            ).build()
+            ).fallbackToDestructiveMigration().build()
 
         }
 

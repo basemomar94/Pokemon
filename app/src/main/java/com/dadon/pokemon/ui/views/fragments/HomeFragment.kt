@@ -94,7 +94,7 @@ class HomeFragment : Fragment(R.layout.home_fragment), HomeAdapter.InteractInter
 
 
     private fun settingRv(_list: MutableList<Pokemon>) {
-        homeAdapter = HomeAdapter(_list, this)
+        homeAdapter = HomeAdapter(_list, this, requireContext())
         binding?.pokemonRv?.apply {
             adapter = homeAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
@@ -137,6 +137,10 @@ class HomeFragment : Fragment(R.layout.home_fragment), HomeAdapter.InteractInter
         uiScope.launch {
             makeFavorite(pokemon, position)
         }
+        pokemon.isFavorite = true
+
+        Toast.makeText(requireContext(), "You've added to the favorite", Toast.LENGTH_SHORT).show()
+        homeAdapter?.notifyItemChanged(position)
 
 
     }
